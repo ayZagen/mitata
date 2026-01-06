@@ -202,10 +202,17 @@ export function lineplot(f) { return _c(f, 'l'); }
 export function group(name, f) { if (typeof name === 'function') (f = name, name = null); return _c(f, 'g', name); }
 
 export function bench(n, fn) {
-  if (typeof n === 'function') (fn = n, n = fn.name || 'anonymous');
+  let b;
+  if(n instanceof B) {
+    b = n
+  }else {
+    if (typeof n === 'function') (fn = n, n = fn.name || 'anonymous');
+    b = new B(n, fn);
+  }
 
   const collection = COLLECTIONS[COLLECTIONS.length - 1];
-  const b = new B(n, fn); b._group = collection.id; return (collection.trials.push(b), b);
+  b._group = collection.id;
+  return (collection.trials.push(b), b);
 }
 
 export function compact(f) {
